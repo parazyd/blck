@@ -2,20 +2,18 @@
 # copyleft (c) 2017 - parazyd
 # see LICENSE file for details
 
+import flask
 import random
 import re
 import os
 import string
 import sys
-from flask import Flask, render_template, request, redirect
 
-app = Flask(__name__)
-
-appurl = "http://blck.cf"
+app = flask.Flask(__name__)
 
 @app.route("/")
 def main():
-    return render_template("index.html")
+    return flask.render_template("index.html")
 
 
 @app.route("/u/<urlshort>")
@@ -28,14 +26,14 @@ def u(urlshort):
     except:
         return "could not find url\n"
 
-    if "curl" not in request.headers.get('User-Agent'):
-        return redirect(realurl, code=301)
+    if "curl" not in flask.request.headers.get('User-Agent'):
+        return flask.redirect(realurl, code=301)
     else:
         return realurl + '\n'
 
 @app.route("/s", methods=['POST'])
 def s():
-    url = request.form['url']
+    url = flask.request.form['url']
 
     if not url:
         return "invalid data\n"
@@ -63,7 +61,7 @@ def s():
     except:
         return "could not save url\n"
 
-    return appurl + '/u/' + urlshort + '\n'
+    return flask.request.url_root + 'u/' + urlshort + '\n'
 
 
 def genid(size=4, chars=string.ascii_uppercase + string.ascii_lowercase):
