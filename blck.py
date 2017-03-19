@@ -29,7 +29,7 @@ def u(urlshort):
     if "curl" not in flask.request.headers.get('User-Agent'):
         return flask.redirect(realurl, code=301)
     else:
-        return realurl + '\n'
+        return realurl
 
 @app.route("/s", methods=['POST'])
 def s():
@@ -56,7 +56,7 @@ def s():
     urlshort = genid()
     try:
         f = open('uris/' + urlshort, 'w')
-        f.write(url)
+        f.write(url + '\n')
         f.close()
     except:
         return "could not save url\n"
