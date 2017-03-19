@@ -1,0 +1,20 @@
+@font-face { font-family: copse; src: url(quattro.woff); }
+
+body {
+	background: #f4f5e7 url('bg.png') no-repeat top right !important;
+	color: #222;
+	font-family: copse, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	padding: 5%;
+}
+
+footer {
+	clear: both;
+	color: #666;
+	font-size: 50%;
+	padding: 2em;
+	text-align: right;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
