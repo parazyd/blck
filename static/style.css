@@ -8,11 +8,19 @@ body {
 	padding: 5%;
 }
 
+.container {
+	font-size: 300%;
+}
+
+.inputbox , .button {
+	font-size: 70%;
+}
+
 footer {
 	clear: both;
 	color: #666;
 	font-size: 50%;
-	padding: 2em;
+	padding: 1em;
 	text-align: right;
 	position: absolute;
 	bottom: 0;
