@@ -27,7 +27,7 @@ def u(urlshort):
         return "could not find url\n"
 
     if "curl" not in flask.request.headers.get('User-Agent'):
-        return flask.redirect(realurl, code=301)
+        return flask.redirect(realurl.rstrip('\n'), code=301)
     else:
         return realurl
 
