@@ -8,7 +8,7 @@ installation
 ------------
 
 get `python-flask` and execute `blck.py`. by default it starts on
-localhost:5000, but you can configure it at the bottom of the script.
+`localhost:5000`, but you can configure it at the bottom of the script.
 
 
 usage
