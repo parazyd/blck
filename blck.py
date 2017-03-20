@@ -7,21 +7,22 @@ import random
 import re
 import os
 import string
-import sys
 
 app = flask.Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def main():
-    return flask.render_template("index.html")
+    try:
+        url = flask.request.form['url']
+        return s(url)
+    except:
+        return flask.render_template("index.html")
 
-
-@app.route("/u/<urlshort>")
+@app.route("/<urlshort>")
 def u(urlshort):
     try:
-        f = open('uris/' + urlshort, 'r')
-        realurl = f.readline()
-        f.close()
+        with open('uris/' + urlshort, 'r') as f:
+            realurl = f.readline()
         os.remove('uris/' + urlshort)
     except:
         return "could not find url\n"
@@ -31,16 +32,8 @@ def u(urlshort):
     else:
         return realurl
 
-@app.route("/s", methods=['POST'])
-def s():
-    url = flask.request.form['url']
 
-    if not url:
-        return "invalid data\n"
-
-    if len(url) > 1024:
-        return "url too long\n"
-
+def s(url):
     ## taken from django
     regex = re.compile(
         r'^(?:http|ftp)s?://' # http:// or https://
@@ -50,28 +43,22 @@ def s():
         r'(?::\d+)?' # optional port
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
-    if not regex.match(url):
+    if not url or len(url) > 1024 or not regex.match(url):
         return "invalid url\n"
 
     urlshort = genid()
     try:
-        f = open('uris/' + urlshort, 'w')
-        f.write(url + '\n')
-        f.close()
+        with open('uris/' + urlshort, 'w') as f:
+            f.write(url + '\n')
     except:
         return "could not save url\n"
 
-    return flask.request.url_root + 'u/' + urlshort + '\n'
+    return flask.request.url_root + urlshort + '\n'
 
 
 def genid(size=4, chars=string.ascii_uppercase + string.ascii_lowercase):
     return ''.join(random.choice(chars) for i in range(size))
 
-if __name__ == "__main__":
-    try:
-        if sys.argv[1] == '-p':
-            _port = sys.argv2
-    except:
-        _port = 5000
 
-    app.run(host="127.0.0.1", port=int(_port))
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=5000)

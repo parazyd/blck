@@ -7,8 +7,8 @@ a one-click url shortener.
 installation
 ------------
 
-get `python-flask` and execute `blck.py`. by default it starts on port
-5000, but you can use the `-p` switch to specify a port.
+get `python-flask` and execute `blck.py`. by default it starts on
+localhost:5000, but you can configure it at the bottom of the script.
 
 
 usage
@@ -17,7 +17,7 @@ usage
 either use the website, or curl:
 
 ```
-curl -F 'url=http://blck.cf' http://blck.cf/s
+curl -F 'url=https://github.com/parazyd/blck.cf' http://blck.cf
 ```
 
 how does it work?
