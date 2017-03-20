@@ -38,7 +38,7 @@ def s():
     if not url:
         return "invalid data\n"
 
-    if len(url) > 256:
+    if len(url) > 1024:
         return "url too long\n"
 
     ## taken from django
