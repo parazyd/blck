@@ -53,6 +53,9 @@ def s(url):
     except:
         return "could not save url\n"
 
+    if flask.request.headers.get('X-Forwarded-Proto') == 'https':
+        return flask.request.url_root.replace('http://', 'https://') + urlshort + '\n'
+
     return flask.request.url_root + urlshort + '\n'
 
 
@@ -60,5 +63,4 @@ def genid(size=4, chars=string.ascii_uppercase + string.ascii_lowercase):
     return ''.join(random.choice(chars) for i in range(size))
 
 
-if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000)
+app.run(host="127.0.0.1", port=5000)
