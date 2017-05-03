@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # copyleft (c) 2017 - parazyd
 # see LICENSE file for details
 
@@ -10,6 +10,7 @@ import string
 
 app = flask.Flask(__name__)
 
+
 @app.route("/", methods=['GET', 'POST'])
 def main():
     try:
@@ -17,6 +18,7 @@ def main():
         return s(url)
     except:
         return flask.render_template("index.html")
+
 
 @app.route("/<urlshort>")
 def u(urlshort):
@@ -37,7 +39,7 @@ def s(url):
     ## taken from django
     regex = re.compile(
         r'^(?:http|ftp)s?://' # http:// or https://
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
         r'localhost|' #localhost...
         r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
         r'(?::\d+)?' # optional port
@@ -54,7 +56,8 @@ def s(url):
         return "could not save url\n"
 
     if flask.request.headers.get('X-Forwarded-Proto') == 'https':
-        return flask.request.url_root.replace('http://', 'https://') + urlshort + '\n'
+        return flask.request.url_root.replace('http://', 'https://') \
+            + urlshort + '\n'
 
     return flask.request.url_root + urlshort + '\n'
 
