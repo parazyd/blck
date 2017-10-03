@@ -1,7 +1,8 @@
-blck.cf
-=======
+blck
+====
 
-a one-click url shortener.
+an ephemeral pastebin/url-shortener. you can only retrieve the paste
+once, and afterwards it's deleted from the server.
 
 
 installation
@@ -9,6 +10,9 @@ installation
 
 get `python-flask` and execute `blck.py`. by default it starts on
 `localhost:5000`, but you can configure it at the bottom of the script.
+
+to choose whether the app runs as a pastebin or url shortener, just
+change the `pastebin` variable inside `blck.py`
 
 
 nginx

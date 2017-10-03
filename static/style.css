@@ -9,6 +9,7 @@ body {
 
 .container { font-size: 300%; }
 .inputbox , .button { font-size: 70%; }
+.textbox { height: 360px; width: 580px; }
 
 a, a:visited, a:active { color: #179c3f; text-decoration: none; }
 a:hover { text-decoration: underline; }

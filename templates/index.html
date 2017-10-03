@@ -7,11 +7,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>blck.cf</h1>
-        <p>Create a one-click expiring link</p>
+        <h1>blck</h1>
+        <p>Create an ephemeral
+        {% if not pastebin %}
+            short url
+        {% else %}
+            paste
+        {% endif %}
+        </p>
         <div class="form">
             <form method="post" action="/">
+            {% if not pastebin %}
                 <input type="url" name="url" id="url" class="inputbox" placeholder="http://blck.cf" required autofocus></input>
+            {% else %}
+                <textarea name="url" class="textbox" required autofocus>Enter text here</textarea><br>
+            {% endif %}
                 <input type="submit" class="button"></input>
             </form>
         </div>
