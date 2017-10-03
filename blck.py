@@ -1,46 +1,50 @@
 #!/usr/bin/env python3
 # copyleft (c) 2017 - parazyd
 # see LICENSE file for details
+"""
+main blck module
+"""
 
-import flask
 import random
 import os
 import string
+import flask
 
 
-app = flask.Flask(__name__)
+PASTEBIN = False
+APP = flask.Flask(__name__)
 
-pastebin = False
 
-
-@app.route("/", methods=['GET', 'POST'])
+@APP.route("/", methods=['GET', 'POST'])
 def main():
+    """ main routine """
     try:
-        url = flask.request.form['url']
-        return s(url)
+        return short(flask.request.form['url'])
     except:
-        return flask.render_template("index.html", pastebin=pastebin)
+        return flask.render_template("index.html", pastebin=PASTEBIN)
 
 
-@app.route("/<urlshort>")
-def u(urlshort):
+@APP.route("/<urlshort>")
+def urlget(urlshort):
+    """ returns a paste if it exists """
     try:
-        with open('uris/' + urlshort, 'r') as f:
-            realurl = f.readline()
+        with open('uris/' + urlshort, 'r') as paste:
+            realurl = paste.readline()
         os.remove('uris/' + urlshort)
-    except:
+    except FileNotFoundError:
         return "could not find paste\n"
 
     cliagents = ['curl', 'Wget']
     if flask.request.headers.get('User-Agent').split('/')[0] not in cliagents \
-            and not pastebin:
+            and not PASTEBIN:
         return flask.redirect(realurl.rstrip('\n'), code=301)
-    else:
-        return realurl
+
+    return realurl
 
 
-def s(url):
-    if not pastebin:
+def short(url):
+    """ pasting logic """
+    if not PASTEBIN:
         # taken from django
         import re
         regex = re.compile(
@@ -58,11 +62,8 @@ def s(url):
         return "invalid paste\n"
 
     urlshort = genid()
-    try:
-        with open('uris/' + urlshort, 'w') as f:
-            f.write(url + '\n')
-    except:
-        return "could not save paste\n"
+    with open('uris/' + urlshort, 'w') as paste:
+        paste.write(url + '\n')
 
     if flask.request.headers.get('X-Forwarded-Proto') == 'https':
         return flask.request.url_root.replace('http://', 'https://') \
@@ -72,8 +73,9 @@ def s(url):
 
 
 def genid(size=4, chars=string.ascii_uppercase + string.ascii_lowercase):
+    """ returns a random id for a paste """
     return ''.join(random.choice(chars) for i in range(size))
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=5000)
+    APP.run(host="127.0.0.1", port=5000)

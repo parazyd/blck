@@ -12,7 +12,7 @@ get `python-flask` and execute `blck.py`. by default it starts on
 `localhost:5000`, but you can configure it at the bottom of the script.
 
 to choose whether the app runs as a pastebin or url shortener, just
-change the `pastebin` variable inside `blck.py`
+change the `PASTEBIN` variable inside `blck.py`
 
 
 nginx
