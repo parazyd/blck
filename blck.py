@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# copyleft (c) 2017 - parazyd
-# see LICENSE file for details
+# copyleft (c) 2017-2018 parazyd
+# see LICENSE file for copyright and license details.
 """
 main blck module
 """
@@ -11,7 +11,10 @@ import string
 import flask
 
 
+# configure blck's behavior here
 PASTEBIN = False
+EPHEMERAL = True
+
 APP = flask.Flask(__name__)
 
 
@@ -30,7 +33,8 @@ def urlget(urlshort):
     try:
         with open('uris/' + urlshort, 'r') as paste:
             realurl = paste.readline()
-        os.remove('uris/' + urlshort)
+        if EPHEMERAL:
+            os.remove('uris/' + urlshort)
     except FileNotFoundError:
         return "could not find paste\n"
 
