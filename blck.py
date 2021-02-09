@@ -31,7 +31,7 @@ def urlget(urlshort):
 
 
 def del_file(f):
-    sleep(60)
+    sleep(10)
     remove(join('files', f))
 
 
