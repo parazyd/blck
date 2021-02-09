@@ -1,8 +1,8 @@
 blck
 ====
 
-an ephemeral pastebin. you can only retrieve the paste for a short time,
-and afterwards it's deleted from the server.
+an ephemeral pastebin. you can only retrieve the paste once, and then it
+is deleted from the server.
 
 
 installation
