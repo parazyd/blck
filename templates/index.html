@@ -1,57 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>blck</title>
-    <style>
-        body {
-            background: #f4f5e7;
-            color: #222;
-            font-family: sans-serif;
-            padding: 5%;
-        }
+  <meta charset="utf-8">
+  <title>blck</title>
+  <style>
+    body {
+      background: #f4f5e7;
+      color: #222;
+      font-family: sans-serif;
+      padding: 5%;
+    }
 
-        .container { font-size: 300%; }
-        .inputbox , .button { font-size: 70%; }
-        .textbox { height: 360px; width: 580px ; }
-        a, a:visited, a:active { color: #179c3f; text-decoration: none; }
-        a:hover { text-decoration: underline; }
+    .container { font-size: 300%; }
+    .inputbox , .button { font-size: 70%; }
+    .textbox { height: 360px; width: 580px ; }
+    a, a:visited, a:active { color: #179c3f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-        footer {
-            clear: both;
-            color: #999;
-            font-size: 40%;
-            padding: 1em;
-            text-align: right;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-        }
-    </style>
+    footer {
+      clear: both;
+      color: #999;
+      font-size: 40%;
+      padding: 1em;
+      text-align: right;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>blck</h1>
-        <p>Create an ephemeral
-        {% if not pastebin %}
-            short url
-        {% else %}
-            paste
-        {% endif %}
-        </p>
-        <div class="form">
-            <form method="post" action="{{ r }}">
-            {% if not pastebin %}
-                <input type="url" name="url" id="url" class="inputbox" placeholder="https://godispor.co" required autofocus></input>
-            {% else %}
-                <textarea name="url" class="textbox" required autofocus>Enter text here</textarea><br>
-            {% endif %}
-                <input type="submit" class="button"></input>
-            </form>
-        </div>
-        <footer>
-            with ❤️ from <a href="https://twitter.com/parazyd">parazyd</a> | <a href="https://github.com/parazyd/blck">source</a>
-        </footer>
-    <div>
+  <div class="container">
+  <h1>blck</h1>
+  <p>Upload an ephemeral file</p>
+  <div class="form">
+    <form method="post" action="{{ r }}" enctype="multipart/form-data">
+      <input type="file" name="c">
+      <input type="submit" class="button" value="Upload">
+    </form>
+  </div>
+  <footer>
+    with ❤️ from <a href="https://twitter.com/parazyd">parazyd</a> |
+    <a href="https://github.com/parazyd/blck">source</a>
+  </footer>
+  <div>
 </body>
 </html>
