@@ -2,15 +2,14 @@
 # copyleft (c) 2017-2021 parazyd <parazyd@dyne.org>
 # see LICENSE file for copyright and license details.
 
+from io import BytesIO
 from os import remove, rename
-from os.path import join
+from os.path import join, isfile
 from random import choice
 from string import ascii_uppercase, ascii_lowercase
-from threading import Thread
-from time import sleep
 
-from flask import (Flask, Blueprint, render_template, request,
-                   send_from_directory)
+from flask import (Flask, Blueprint, render_template, request, safe_join,
+                   send_file, abort)
 import magic
 
 bp = Blueprint('blck', __name__, template_folder='templates')
@@ -24,20 +23,21 @@ def main():
 
 @bp.route("<urlshort>")
 def urlget(urlshort):
-    thread = Thread(target=del_file, args=(urlshort,))
-    thread.daemon = True
-    thread.start()
-    return send_from_directory('files', urlshort)
-
-
-def del_file(f):
-    sleep(10)
-    remove(join('files', f))
+    fp = safe_join('files', urlshort)
+    if not isfile(fp):
+        abort(404)
+    r = BytesIO()
+    mime = magic.from_file(fp, mime=True)
+    with open(fp, 'rb') as fo:
+        r.write(fo.read())
+    r.seek(0)
+    remove(fp)
+    return send_file(r, mimetype=mime)
 
 
 def short(c):
     if not c or not c['c']:
-        return "invalid paste\n"
+        return abort(400)
 
     s = genid()
     f = c['c']
