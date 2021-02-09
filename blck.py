@@ -12,12 +12,6 @@ from string import ascii_uppercase, ascii_lowercase
 from flask import Flask, render_template, redirect, request
 
 APP = Flask(__name__)
-# configure blck's behavior here
-EPHEMERAL = True
-PASTEBIN = False
-if not PASTEBIN:
-    import re
-
 
 @APP.route("/", methods=['GET', 'POST'])
 def main():
@@ -81,4 +75,24 @@ def genid(size=4, chars=ascii_uppercase + ascii_lowercase):
 
 
 if __name__ == '__main__':
-    APP.run(host="127.0.0.1", port=5000)
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument('--pastebin', default=False, action='store_true',
+                        help='Use as pastebin rather than URL shortener')
+    parser.add_argument('--noephemeral', default=False, action='store_true',
+                        help='Do not run in ephemeral mode')
+    parser.add_argument('-l', default='localhost', help='Listen host')
+    parser.add_argument('-p', default=5000, help='Listen port')
+    parser.add_argument('-d', default=False, action='store_true', help='Debug')
+    args = parser.parse_args()
+
+    EPHEMERAL = not args.noephemeral
+    PASTEBIN = args.pastebin
+    if not PASTEBIN:
+        import re
+
+    if args.d:
+        APP.run(host=args.l, port=args.p, threaded=True, debug=args.d)
+    else:
+        from bjoern import run
+        run(APP, args.l, args.p)
