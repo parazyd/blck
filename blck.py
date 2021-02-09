@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
 # copyleft (c) 2017-2021 parazyd <parazyd@dyne.org>
 # see LICENSE file for copyright and license details.
-"""
-main blck module
-"""
 
 from random import choice
 from os import remove
 from string import ascii_uppercase, ascii_lowercase
 
-from flask import Flask, render_template, redirect, request
+from flask import Flask, Blueprint, render_template, redirect, request
 
-APP = Flask(__name__)
+bp = Blueprint('blck', __name__, template_folder='templates')
 
-@APP.route("/", methods=['GET', 'POST'])
+@bp.route("/", methods=['GET', 'POST'])
 def main():
     """ main routine """
     try:
         return short(request.form['url'])
     except:
-        return render_template("index.html", pastebin=PASTEBIN)
+        return render_template("index.html", pastebin=PASTEBIN, root=args.r)
 
 
-@APP.route("/<urlshort>")
+@bp.route("/<urlshort>")
 def urlget(urlshort):
     """ returns a paste if it exists """
     try:
@@ -33,7 +30,7 @@ def urlget(urlshort):
     except FileNotFoundError:
         return "could not find paste\n"
 
-    cliagents = ['curl', 'Wget']
+    cliagents = ['curl', 'Wget', '']
     if request.headers.get('User-Agent').split('/')[0] not in cliagents \
             and not PASTEBIN:
         return redirect(realurl.rstrip('\n'), code=301)
@@ -64,9 +61,9 @@ def short(url):
         paste.write(url + '\n')
 
     if request.headers.get('X-Forwarded-Proto') == 'https':
-        return request.url_root.replace('http://', 'https://') + urlshort + '\n'
+        return request.url_root.replace('http://', 'https://') + args.r.lstrip('/') + urlshort + '\n'
 
-    return request.url_root + urlshort + '\n'
+    return request.url_root + args.r.lstrip('/') + urlshort + '\n'
 
 
 def genid(size=4, chars=ascii_uppercase + ascii_lowercase):
@@ -81,6 +78,7 @@ if __name__ == '__main__':
                         help='Use as pastebin rather than URL shortener')
     parser.add_argument('--noephemeral', default=False, action='store_true',
                         help='Do not run in ephemeral mode')
+    parser.add_argument('-r', default='/', help='Application root')
     parser.add_argument('-l', default='localhost', help='Listen host')
     parser.add_argument('-p', default=5000, help='Listen port')
     parser.add_argument('-d', default=False, action='store_true', help='Debug')
@@ -91,8 +89,11 @@ if __name__ == '__main__':
     if not PASTEBIN:
         import re
 
+    app = Flask(__name__)
+    app.register_blueprint(bp, url_prefix=args.r)
+
     if args.d:
-        APP.run(host=args.l, port=args.p, threaded=True, debug=args.d)
+        app.run(host=args.l, port=args.p, threaded=True, debug=args.d)
     else:
         from bjoern import run
-        run(APP, args.l, args.p)
+        run(app, args.l, int(args.p))

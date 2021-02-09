@@ -16,7 +16,7 @@
         {% endif %}
         </p>
         <div class="form">
-            <form method="post" action="/">
+            <form method="post" action="{{ r }}">
             {% if not pastebin %}
                 <input type="url" name="url" id="url" class="inputbox" placeholder="http://blck.cf" required autofocus></input>
             {% else %}
