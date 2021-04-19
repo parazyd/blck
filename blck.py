@@ -14,6 +14,7 @@ import magic
 
 bp = Blueprint('blck', __name__, template_folder='templates')
 
+
 @bp.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
@@ -52,8 +53,10 @@ def short(c):
         rename(safe_join('files', t), safe_join('files', s))
 
     if request.headers.get('X-Forwarded-Proto') == 'https':
-        return ''.join([request.url_root.replace('http://', 'https://'),
-                        args.r.lstrip('/'), s, '\n'])
+        return ''.join([
+            request.url_root.replace('http://', 'https://'),
+            args.r.lstrip('/'), s, '\n'
+        ])
     return ''.join([request.url_root + args.r.lstrip('/'), s, '\n'])
 
 
